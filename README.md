@@ -35,19 +35,6 @@ All queries are in [`queries/03_analytics_queries.sql`](queries/03_analytics_que
 
 A reusable reporting view, `v_monthly_customer_spend`, is defined in [`views/04_reporting_views.sql`](views/04_reporting_views.sql).
 
-### Two details worth noting
-
-**Q3 uses `NOT EXISTS` instead of `NOT IN`.** If the subquery of a `NOT IN` ever returns a `NULL`, the whole condition evaluates to unknown and the query silently returns no rows. `NOT EXISTS` doesn't have this problem.
-
-**Q4 puts the status filter in the `ON` clause.** Filtering the right-hand table in `WHERE` would remove the rows where it is `NULL`, turning the `LEFT JOIN` into an inner join and dropping inactive customers from the report:
-
-```sql
-FROM customers c
-LEFT JOIN transactions t
-       ON t.customer_id = c.customer_id
-      AND t.status = 'COMPLETED'      -- in ON, not WHERE
-```
-
 ### Sample results
 
 **Q8 – Monthly payment volume (EUR)**
