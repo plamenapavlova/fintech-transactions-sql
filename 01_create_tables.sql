@@ -2,8 +2,7 @@
 -- Fintech Transactions Database - Schema
 -- PostgreSQL 16
 --
--- Models a digital-banking card payments system: customers on different
--- account tiers make card payments at merchants in several cities.
+-- Models a digital-banking card payments system: 
 -- Normalized to 3NF: each fact (city, category, merchant, customer,
 -- transaction) is stored exactly once and linked by foreign keys.
 -- =====================================================================
@@ -33,8 +32,6 @@ CREATE TABLE customers (
 );
 
 -- Merchant categories (e.g. Groceries, Travel).
--- Kept in its own table so a category is a property of the merchant,
--- not repeated on every transaction.
 CREATE TABLE merchant_categories (
     category_id   INTEGER     PRIMARY KEY,
     category_name VARCHAR(40) NOT NULL UNIQUE
@@ -48,7 +45,7 @@ CREATE TABLE merchants (
     city_id       INTEGER      NOT NULL REFERENCES cities (city_id)
 );
 
--- Card transactions (the fact table)
+-- Card transactions
 CREATE TABLE transactions (
     transaction_id INTEGER       PRIMARY KEY,
     customer_id    INTEGER       NOT NULL REFERENCES customers (customer_id),
