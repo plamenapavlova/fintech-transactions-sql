@@ -1,9 +1,6 @@
 -- =====================================================================
 -- Fintech Transactions Database - Analytics queries
 -- PostgreSQL 16
---
--- Unless stated otherwise, "spend" means COMPLETED transactions only:
--- declined payments never moved money, and refunded ones were returned.
 -- =====================================================================
 
 
@@ -26,7 +23,7 @@ ORDER BY total_spend DESC;
 
 
 -- ---------------------------------------------------------------------
--- Q2. High-value transactions (over EUR 300)
+-- Q2. High-value transactions > EUR 300
 -- Business question: which large payments happened, where and with whom?
 -- Concepts: multi-table JOIN, filtering
 -- ---------------------------------------------------------------------
@@ -47,7 +44,7 @@ ORDER BY t.amount DESC;
 
 
 -- ---------------------------------------------------------------------
--- Q3. Inactive customers (no transactions at all)
+-- Q3. Inactive customers - no transactions at all
 -- Business question: who signed up but never used their card?
 -- Concepts: correlated subquery with NOT EXISTS
 -- (NOT EXISTS is preferred over NOT IN, which returns no rows
