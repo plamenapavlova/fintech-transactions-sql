@@ -2,54 +2,9 @@
 
 A relational database for a digital-banking card payments system, with analytics queries that answer typical business questions: where customers spend, which customers and merchants matter most, how volume trends month to month, and where payments fail.
 
-The project started as a university Database Systems assignment and was redesigned and extended: a new domain, a normalized schema with constraints and indexes, a larger dataset, and more queries (subqueries, HAVING, CASE, conditional aggregation, views).
-
-**Tech:** PostgreSQL 16 · SQL (DDL, DML, joins, subqueries, aggregation, views)
+The project started as a university Database Systems assignment and was redesigned and extended: a new domain, a normalized schema with constraints and indexes, a larger dataset and more queries (subqueries, HAVING, CASE, conditional aggregation, views).
 
 ---
-
-## Data model
-
-```mermaid
-erDiagram
-    CITIES ||--o{ CUSTOMERS : "home of"
-    CITIES ||--o{ MERCHANTS : "located in"
-    MERCHANT_CATEGORIES ||--o{ MERCHANTS : "classifies"
-    CUSTOMERS ||--o{ TRANSACTIONS : "makes"
-    MERCHANTS ||--o{ TRANSACTIONS : "receives"
-
-    CITIES {
-        int city_id PK
-        varchar city_name
-        char country_code
-    }
-    CUSTOMERS {
-        int customer_id PK
-        varchar full_name
-        varchar tier "Standard | Premium | Metal"
-        int home_city_id FK
-        date signup_date
-    }
-    MERCHANT_CATEGORIES {
-        int category_id PK
-        varchar category_name "UNIQUE"
-    }
-    MERCHANTS {
-        int merchant_id PK
-        varchar merchant_name
-        int category_id FK
-        int city_id FK
-    }
-    TRANSACTIONS {
-        int transaction_id PK
-        int customer_id FK
-        int merchant_id FK
-        numeric amount "CHECK > 0"
-        char currency
-        varchar status "COMPLETED | DECLINED | REFUNDED"
-        timestamp created_at
-    }
-```
 
 ### Design decisions
 
@@ -131,35 +86,6 @@ Metal customers spend about 40% more per payment than average, while Premium and
 
 ---
 
-## Running it
-
-Requires PostgreSQL (tested on 16).
-
-```bash
-createdb fintech
-
-psql -d fintech -f schema/01_create_tables.sql
-psql -d fintech -f data/02_seed_data.sql
-psql -d fintech -f views/04_reporting_views.sql
-psql -d fintech -f queries/03_analytics_queries.sql
-```
-
-The schema script drops and recreates the tables, so it can be rerun safely.
-
-## Project structure
-
-```
-fintech-transactions-sql/
-├── README.md
-├── schema/
-│   └── 01_create_tables.sql      tables, constraints, indexes
-├── data/
-│   └── 02_seed_data.sql          sample data (6 cities, 20 customers, 12 merchants, 160 transactions)
-├── queries/
-│   └── 03_analytics_queries.sql  10 analytics queries
-└── views/
-    └── 04_reporting_views.sql    reporting view
-```
 
 ## Data
 
